@@ -28,4 +28,4 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Execute script
       run: |
-        python run.py
+        python run.py ${{ bot_token }}
