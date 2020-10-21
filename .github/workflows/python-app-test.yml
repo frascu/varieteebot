@@ -5,6 +5,8 @@ name: Tee Bot [TEST]
 
 on:
   workflow_dispatch:
+  push:
+    branches: [ main ]
   
 jobs:
   build:
