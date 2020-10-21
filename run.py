@@ -13,21 +13,24 @@ if len(sys.argv) < 2:
 # send the images
 BASE_URL = "https://api.telegram.org/bot{}/"
 API_TOKEN = sys.argv[1]
-CHAT_ID = "@varietee"
+CHAT_ID = sys.argv[2]
 
 
 def send(method, params):
     url_string = BASE_URL.format(API_TOKEN) + method
-    print(BASE_URL)
-    print(method)
-    print("parameters:", params)
+    print("CALL: ", BASE_URL + method)
+    print("PARAMETERS:", params)
+
     r = requests.get(url=url_string, params=params)
 
-    print("response:", r.json())
+    print("RESPONSE:", r.json())
 
 
-caption = 'New Today Tee!!\n\n{}\n\n{}'
+caption = '[New Today\'s Tee]\n\n{}\n\n{}'
 
 images = get_tees()
 for image in images:
-    send("sendPhoto", {"chat_id": CHAT_ID, "photo": image.link, "caption": caption.format(image.title, image.source)})
+    title = image.title.replace("by", "\nby")
+    send("sendPhoto", {"chat_id": CHAT_ID, "photo": image.link, "caption": caption.format(title, image.source),
+                       "reply_markup": [[{"text": "text", "url": "https://www.pampling.com"}]]
+                       })

@@ -10,24 +10,25 @@ class Image:
         self.source = source
 
 
-def get_tees():
+def add_qwertee_tees(images):
     # retrieve images from qwertee
-    url = "https://www.qwertee.com/"
+    url = "https://www.qwertee.com"
     page = requests.get(url)
     soup = BeautifulSoup(page.content, 'html.parser')
 
     div_slides = soup.find("div", {"class": "big-slides"})
-    my_divs = div_slides.findAll("div", {"class": "index-tee"})
+    my_divs = div_slides.find_all("div", {"class": "index-tee"})
 
-    images = []
     for my_div in my_divs:
         title = my_div.find("div", {"class": "title"})
         image = my_div.find("img")
         link = image.get("src").replace("mens", "zoom")
         images.append(Image(link, title.text, url))
 
+
+def add_tee_tee_eu_tees(images):
     # retrieve images from teetee
-    url = "https://www.teetee.eu/"
+    url = "https://www.teetee.eu"
     page = requests.get(url)
     soup = BeautifulSoup(page.content, 'html.parser')
 
@@ -39,4 +40,31 @@ def get_tees():
 
     images.append(Image(url_image, title, url))
 
+
+def add_pampling_tees(images):
+    # retrieve images from teetee
+    url = "https://www.pampling.com"
+    page = requests.get(url)
+    soup = BeautifulSoup(page.content, 'html.parser')
+
+    div_slides = soup.find(id="modulo-xt-doble")
+
+    div_images = div_slides.find_all("div", {"class": "carousel-inner"})
+    div_titles = div_slides.find_all("div", {"class": "franja-autor"})
+
+    for i in range(len(div_images)):
+        div_image = div_images[i].find_all()[0]
+        title = div_titles[i].text.replace("\n", " ").strip()
+
+        url_image = div_image["style"].replace("background-image:url(", "").replace(");", "")
+
+        images.append(Image(url_image, title, url))
+    print(images)
+
+
+def get_tees():
+    images = []
+    add_qwertee_tees(images)
+    add_tee_tee_eu_tees(images)
+    add_pampling_tees(images)
     return images
