@@ -7,7 +7,9 @@ on:
   workflow_dispatch:
     inputs:
       bot_token:
-        description: 'Bot token' 
+        description: 'Bot token'
+      channel_id:
+        description: 'Channel id' 
 
 jobs:
   build:
@@ -28,4 +30,4 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Execute script
       run: |
-        python run.py ${{ github.event.inputs.bot_token }}
+        python run.py ${{ github.event.inputs.bot_token }} ${{ github.event.inputs.channel_id }}
