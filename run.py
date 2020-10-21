@@ -31,6 +31,4 @@ caption = '[New Today\'s Tee]\n\n{}\n\n{}'
 images = get_tees()
 for image in images:
     title = image.title.replace("by", "\nby")
-    send("sendPhoto", {"chat_id": CHAT_ID, "photo": image.link, "caption": caption.format(title, image.source),
-                       "reply_markup": [[{"text": "text", "url": "https://www.pampling.com"}]]
-                       })
+    send("sendPhoto", {"chat_id": CHAT_ID, "photo": image.link, "caption": caption.format(title, image.source)})
