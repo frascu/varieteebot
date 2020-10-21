@@ -5,11 +5,6 @@ name: Python application
 
 on:
   workflow_dispatch:
-    inputs:
-      bot_token:
-        description: 'Bot token'
-      channel_id:
-        description: 'Channel id' 
 
 jobs:
   build:
