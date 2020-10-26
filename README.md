@@ -15,8 +15,6 @@ Then, I decided to create a tee bot that sends today's tees sold by different te
 Every day the telegram bot extracts today's tees with web scraping and sends the images and the titles on a public telegram channel.
 
 ## Implementation
-You can find the code in my GitHub repository: [varieteebot](https://github.com/frascu/varieteebot).
-
 The repository contains mainly three files:
 * **tee.py**: it contains the function `get_tees` that returns a list of objects of type `Image`.
 Each object contains: 
