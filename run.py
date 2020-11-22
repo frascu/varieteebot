@@ -21,14 +21,16 @@ def send(method, params):
     print("CALL: ", BASE_URL + method)
     print("PARAMETERS:", params)
 
-    r = requests.get(url=url_string, params=params)
+    r = requests.post(url=url_string, json=params)
 
     print("RESPONSE:", r.json())
 
 
-caption = '[New Today\'s Tee]\n\n{}\n\n{}'
+caption = '[New Today\'s Tee]\n{}\n{}'
 
 images = get_tees()
+media_array = []
 for image in images:
-    title = image.title.replace(" by", "\nby")
-    send("sendPhoto", {"chat_id": CHAT_ID, "photo": image.link, "caption": caption.format(title, image.source)})
+    media_array.append({"type": "photo", "media": image.link, "caption": caption.format(image.title, image.source)})
+
+send("sendMediaGroup", {"chat_id": CHAT_ID, "media": media_array})
