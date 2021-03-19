@@ -34,7 +34,10 @@ def add_tee_tee_eu_tees(images):
 
     div_slides = soup.find("div", {"class": "slide-product"})
 
-    url_image = soup.find("div", {"class": "sidebar"}).find_all('a')[0]["href"]
+    div_sidebar = soup.find("div", {"class": "sidebar"})
+    if not div_sidebar:
+        return
+    url_image = div_sidebar.find_all('a')[0]["href"]
     div_title = div_slides.find("div", {"class": "info-product"})
     title = div_title.find("h1").text + " " + div_title.find("h2").text
 
