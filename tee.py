@@ -40,7 +40,10 @@ def add_tee_tee_eu_tees(images):
 
     div_slides = soup.find("div", {"class": "slide-product"})
 
-    url_image = soup.find("div", {"class": "sidebar"}).find_all('a')[0]["href"].replace("uploads//", "uploads/")
+    # url_image = soup.find("div", {"class": "sidebar"}).find_all('a')[0]["href"].replace("uploads//", "uploads/")
+    div_image = div_slides.find_all("div", {"class": "design"})[0]
+    url_image = div_image["style"].replace("background-image:url('", "").replace("');", "").replace("http:", "https:")
+
     div_title = div_slides.find("div", {"class": "info-product"})
     title = div_title.find("h1").text + " " + div_title.find("h2").text
 
@@ -70,7 +73,7 @@ def add_pampling_tees(images):
 def get_tees():
     images = []
     add_qwertee_tees(images)
-    add_tee_tee_eu_tees(images)
+    # add_tee_tee_eu_tees(images)
     add_pampling_tees(images)
     return images
 
