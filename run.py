@@ -3,8 +3,9 @@
 # pip install beautifulsoup4
 
 import sys
+
 import requests
-from bs4 import BeautifulSoup
+
 from tee import get_tees
 
 if len(sys.argv) < 2:
@@ -23,12 +24,17 @@ def send(method, params):
 
     r = requests.post(url=url_string, json=params)
 
-    print("RESPONSE:", r.json())
+    json = r.json()
+
+    print("RESPONSE:", json)
+    if not json["ok"]:
+        raise Exception("Sending is failed")
 
 
 caption = '[New Today\'s Tee]\n{}\n{}'
 
 images = get_tees()
+print(images)
 media_array = []
 for image in images:
     media_array.append({"type": "photo", "media": image.link, "caption": caption.format(image.title, image.source)})

@@ -9,6 +9,12 @@ class Image:
         self.title = title
         self.source = source
 
+    def __str__(self):
+        return f'{self.link} {self.title} {self.source}'
+
+    def __repr__(self):
+        return f'{self.link} {self.title} {self.source}'
+
 
 def add_qwertee_tees(images):
     # retrieve images from qwertee
@@ -34,7 +40,7 @@ def add_tee_tee_eu_tees(images):
 
     div_slides = soup.find("div", {"class": "slide-product"})
 
-    url_image = soup.find("div", {"class": "sidebar"}).find_all('a')[0]["href"]
+    url_image = soup.find("div", {"class": "sidebar"}).find_all('a')[0]["href"].replace("uploads//", "uploads/")
     div_title = div_slides.find("div", {"class": "info-product"})
     title = div_title.find("h1").text + " " + div_title.find("h2").text
 
@@ -53,13 +59,12 @@ def add_pampling_tees(images):
     div_titles = div_slides.find_all("div", {"class": "franja-autor"})
 
     for i in range(len(div_images)):
-        div_image = div_images[i].find_all()[0]
+        div_image = div_images[i].find("div", {"class": "active"})
         title = div_titles[i].text.replace("\n", " ").strip()
 
         url_image = div_image["style"].replace("background-image:url(", "").replace(");", "")
 
         images.append(Image(url_image, title, url))
-    print(images)
 
 
 def get_tees():
@@ -68,3 +73,8 @@ def get_tees():
     add_tee_tee_eu_tees(images)
     add_pampling_tees(images)
     return images
+
+
+if __name__ == "__main__":
+    for tee in get_tees():
+        print(tee)
