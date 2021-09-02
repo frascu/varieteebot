@@ -38,15 +38,16 @@ def add_tee_tee_eu_tees(images):
     page = requests.get(url)
     soup = BeautifulSoup(page.content, 'html.parser')
 
-    div_slides = soup.find("div", {"class": "slide-product"})
+    a_element = soup.select_one("#teecommerce > div.content.body-product > div > div > div > div:nth-child(2) > "
+                                "div.col-md-4 > div > a")
 
-    # url_image = soup.find("div", {"class": "sidebar"}).find_all('a')[0]["href"].replace("uploads//", "uploads/")
-    div_image = div_slides.find_all("div", {"class": "design"})[0]
-    url_image = div_image["style"].replace("background-image:url('", "").replace("');", "").replace("http:", "https:")
+    url_image = a_element["href"]
 
-    div_title = div_slides.find("div", {"class": "info-product"})
-    title = div_title.find("h1").text + " " + div_title.find("h2").text
-
+    div_title_1 = soup.select_one(
+        "#teecommerce > div.content.head-product > div > div > div > div > div.info-product.animated.fadeIn > h1")
+    div_title_2 = soup.select_one(
+        "#teecommerce > div.content.head-product > div > div > div > div > div.info-product.animated.fadeIn > h2")
+    title = div_title_1.text + " " + div_title_2.text
     images.append(Image(url_image, title, url))
 
 
@@ -67,14 +68,47 @@ def add_pampling_tees(images):
 
         url_image = div_image["style"].replace("background-image:url(", "").replace(");", "")
 
-        images.append(Image(url_image, title, url))
+        images.append(Image(url_image, title.strip(), url))
+
+
+def add_theyetee_tees(images):
+    url = "https://theyetee.com"
+    page = requests.get(url)
+    soup = BeautifulSoup(page.content, 'html.parser')
+
+    a_element = soup.select_one(
+        "article > div:nth-child(3) > section.module_timed-item.is--full.is--left > "
+        "div.module_timed-item--images")
+    a_element = a_element.find_all("a")[0]
+    url_image = "https:" + a_element["href"]
+
+    div_title = soup.select_one(
+        "article > div:nth-child(3) > section.module_timed-item.is--full.is--left > "
+        "div.module_timed-item--content > div.module_timed-item--info")
+    title = div_title.findChildren("h2")[0].text + " " + div_title.findChildren("div")[0].text
+    images.append(Image(url_image, title.strip(), url))
+
+    a_element = soup.select_one(
+        "article > div:nth-child(3) > section.module_timed-item.is--full.is--right > "
+        "div.module_timed-item--images")
+    a_element = a_element.find_all("a")[0]
+    url_image = "https:" + a_element["href"]
+
+    div_title = soup.select_one(
+        "article > div:nth-child(3) > section.module_timed-item.is--full.is--right > "
+        "div.module_timed-item--content > div.module_timed-item--info")
+    title = div_title.findChildren("h2")[0].text + " " + div_title.findChildren("div")[0].text
+    images.append(Image(url_image, title.strip(), url))
 
 
 def get_tees():
     images = []
     add_qwertee_tees(images)
-    # add_tee_tee_eu_tees(images)
+    add_tee_tee_eu_tees(images)
     add_pampling_tees(images)
+    add_theyetee_tees(images)
+    # https://www.othertees.com/daily-tees
+    # https://www.designbyhumans.com/shop/mens-t-shirts/
     return images
 
 
