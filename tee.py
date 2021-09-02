@@ -42,13 +42,12 @@ def add_tee_tee_eu_tees(images):
                                 "div.col-md-4 > div > a")
 
     url_image = a_element["href"]
-
     div_title_1 = soup.select_one(
         "#teecommerce > div.content.head-product > div > div > div > div > div.info-product.animated.fadeIn > h1")
     div_title_2 = soup.select_one(
         "#teecommerce > div.content.head-product > div > div > div > div > div.info-product.animated.fadeIn > h2")
     title = div_title_1.text + " " + div_title_2.text
-    images.append(Image(url_image, title, url))
+    images.append(Image(url_image.replace("uploads//", "uploads/"), title, url))
 
 
 def add_pampling_tees(images):
@@ -104,9 +103,9 @@ def add_theyetee_tees(images):
 def get_tees():
     images = []
     add_qwertee_tees(images)
-    add_tee_tee_eu_tees(images)
+    # add_tee_tee_eu_tees(images)
     add_pampling_tees(images)
-    # add_theyetee_tees(images)
+    add_theyetee_tees(images)
     # https://www.othertees.com/daily-tees
     # https://www.designbyhumans.com/shop/mens-t-shirts/
     return images
