@@ -86,7 +86,7 @@ def add_theyetee_tees(images):
         "article > div:nth-child(3) > section.module_timed-item.is--full.is--left > "
         "div.module_timed-item--content > div.module_timed-item--info")
     title = div_title.findChildren("h2")[0].text + " " + div_title.findChildren("div")[0].text
-    images.append(Image(url_image, title.strip(), url))
+    images.append(Image(url_image.split("?")[0], title.strip(), url))
 
     a_element = soup.select_one(
         "article > div:nth-child(3) > section.module_timed-item.is--full.is--right > "
@@ -98,7 +98,7 @@ def add_theyetee_tees(images):
         "article > div:nth-child(3) > section.module_timed-item.is--full.is--right > "
         "div.module_timed-item--content > div.module_timed-item--info")
     title = div_title.findChildren("h2")[0].text + " " + div_title.findChildren("div")[0].text
-    images.append(Image(url_image, title.strip(), url))
+    images.append(Image(url_image.split("?")[0], title.strip(), url))
 
 
 def get_tees():
