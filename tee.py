@@ -1,5 +1,7 @@
+
 import requests
 from bs4 import BeautifulSoup
+from lxml import etree
 
 
 class Image:
@@ -75,28 +77,22 @@ def add_theyetee_tees(images):
     page = requests.get(url)
     soup = BeautifulSoup(page.content, 'html.parser')
 
-    a_element = soup.select_one(
-        "article > div:nth-child(3) > section.module_timed-item.is--full.is--left > "
-        "div.module_timed-item--images")
-    a_element = a_element.find_all("a")[0]
-    url_image = "https:" + a_element["href"]
+    dom = etree.HTML(str(soup))
 
-    div_title = soup.select_one(
-        "article > div:nth-child(3) > section.module_timed-item.is--full.is--left > "
-        "div.module_timed-item--content > div.module_timed-item--info")
-    title = div_title.findChildren("h2")[0].text + " " + div_title.findChildren("div")[0].text
+    a_element = dom.xpath("/html/body/div[8]/div/article[2]/div/section[1]/div[1]/section/div/div/div[1]/a")[0]
+    url_image = "https:" + a_element.attrib["href"]
+
+    name = dom.xpath("/html/body/div[8]/div/article[2]/div/section[1]/div[2]/h2")[0].text
+    owner = dom.xpath("/html/body/div[8]/div/article[2]/div/section[1]/div[2]/div[1]")[0].text
+    title = name + " " + owner
     images.append(Image(url_image.split("?")[0], title.strip(), url))
 
-    a_element = soup.select_one(
-        "article > div:nth-child(3) > section.module_timed-item.is--full.is--right > "
-        "div.module_timed-item--images")
-    a_element = a_element.find_all("a")[0]
-    url_image = "https:" + a_element["href"]
+    a_element = dom.xpath("/html/body/div[8]/div/article[2]/div/section[2]/div[1]/section/div/div/div[1]/a")[0]
+    url_image = "https:" + a_element.attrib["href"]
 
-    div_title = soup.select_one(
-        "article > div:nth-child(3) > section.module_timed-item.is--full.is--right > "
-        "div.module_timed-item--content > div.module_timed-item--info")
-    title = div_title.findChildren("h2")[0].text + " " + div_title.findChildren("div")[0].text
+    name = dom.xpath("/html/body/div[8]/div/article[2]/div/section[2]/div[2]/h2")[0].text
+    owner = dom.xpath("/html/body/div[8]/div/article[2]/div/section[2]/div[2]/div[1]")[0].text
+    title = name + " " + owner
     images.append(Image(url_image.split("?")[0], title.strip(), url))
 
 
