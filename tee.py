@@ -79,19 +79,19 @@ def add_theyetee_tees(images):
 
     dom = etree.HTML(str(soup))
 
-    a_element = dom.xpath("/html/body/div[8]/div/article[2]/div/section[1]/div[1]/section/div/div/div[1]/a")[0]
+    a_element = dom.xpath("/html/body/div[8]/article/div[3]/section[1]/div[1]/section/div/div/div[1]/a")[0]
     url_image = "https:" + a_element.attrib["href"]
 
-    name = dom.xpath("/html/body/div[8]/div/article[2]/div/section[1]/div[2]/h2")[0].text
-    owner = dom.xpath("/html/body/div[8]/div/article[2]/div/section[1]/div[2]/div[1]")[0].text
-    title = name + " " + owner
+    name = dom.xpath("/html/body/div[8]/article/div[3]/section[1]/div[2]/div[1]/h2")[0].text
+    owner = dom.xpath("/html/body/div[8]/article/div[3]/section[1]/div[2]/div[1]/div/a")[0].text
+    title = name + " by " + owner
     images.append(Image(url_image.split("?")[0], title.strip(), url))
 
-    a_element = dom.xpath("/html/body/div[8]/div/article[2]/div/section[2]/div[1]/section/div/div/div[1]/a")[0]
+    a_element = dom.xpath("/html/body/div[8]/article/div[3]/section[2]/div[1]/section/div/div/div[1]/a")[0]
     url_image = "https:" + a_element.attrib["href"]
 
-    name = dom.xpath("/html/body/div[8]/div/article[2]/div/section[2]/div[2]/h2")[0].text
-    owner = dom.xpath("/html/body/div[8]/div/article[2]/div/section[2]/div[2]/div[1]")[0].text
+    name = dom.xpath("/html/body/div[8]/article/div[3]/section[2]/div[2]/div[1]/h2")[0].text
+    owner = dom.xpath("/html/body/div[8]/article/div[3]/section[2]/div[2]/div[1]/div/a")[0].text
     title = name + " " + owner
     images.append(Image(url_image.split("?")[0], title.strip(), url))
 
