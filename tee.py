@@ -114,7 +114,7 @@ def add_theyetee_tees(images):
 def get_tees():
     images = []
     add_qwertee_tees(images)
-    add_tee_tee_eu_tees(images)
+    # add_tee_tee_eu_tees(images)
     add_pampling_tees(images)
     add_theyetee_tees(images)
     # https://www.othertees.com/daily-tees
