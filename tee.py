@@ -112,18 +112,22 @@ def add_theyetee_tees(images):
 
 
 def add_othertees_tees(images):
-    base_url = "https://www.othertees.com"
-    url = base_url + "/daily-tees"
-    page = requests.get(url)
-    soup = BeautifulSoup(page.content, 'html.parser')
+    try:
+        base_url = "https://www.othertees.com"
+        url = base_url + "/daily-tees"
+        page = requests.get(url)
+        soup = BeautifulSoup(page.content, 'html.parser')
 
-    for i in range(3):
-        div_element = soup.select(f'#limited_container > div > div:nth-child({i + 1}) > div.project > div.project-img > div')[0]
-        url_image = base_url + div_element.attrs["data-src"]
-        title = soup.select(f'#limited_container > div > div:nth-child({i + 1}) > div.project > h4 > a')[0].text
-        author = soup.select(f'#limited_container > div > div:nth-child({i + 1}) > div.project > h4 > p > a')[0].text
-        title = title + " by " + author
-        images.append(Image(url_image, title.strip(), url))
+        for i in range(3):
+            div_element = soup.select(f'#limited_container > div > div:nth-child({i + 1}) > div.project > div.project-img > div')[0]
+            url_image = base_url + div_element.attrs["data-src"]
+            title = soup.select(f'#limited_container > div > div:nth-child({i + 1}) > div.project > h4 > a')[0].text
+            author = soup.select(f'#limited_container > div > div:nth-child({i + 1}) > div.project > h4 > p > a')[0].text
+            title = title + " by " + author
+            images.append(Image(url_image, title.strip(), url))
+    
+    except IndexError:
+        print("No tees found for thyeetee")
 
 
 def get_tees():
