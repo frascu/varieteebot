@@ -35,8 +35,12 @@ caption = '[New Today\'s Tee]\n{}\n{}'
 
 images = get_tees()
 print(images)
-media_array = []
-for image in images:
-    media_array.append({"type": "photo", "media": image.link, "caption": caption.format(image.title, image.source)})
+media_array = [{"type": "photo", "media": image.link, "caption": caption.format(image.title, image.source)}
+               for image in images]
 
-send("sendMediaGroup", {"chat_id": CHAT_ID, "media": media_array})
+if len(media_array) <= 10:
+    send("sendMediaGroup", {"chat_id": CHAT_ID, "media": media_array})
+else:
+    middle_index = int(len(media_array) / 2)
+    send("sendMediaGroup", {"chat_id": CHAT_ID, "media": media_array[:middle_index]})
+    send("sendMediaGroup", {"chat_id": CHAT_ID, "media": media_array[middle_index:]})
