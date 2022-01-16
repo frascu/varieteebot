@@ -1,7 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
-from lxml import etree
-
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.firefox.options import Options
 
 class Image:
 
@@ -17,42 +18,31 @@ class Image:
         return f'{self.link} {self.title} {self.source}'
 
 
-def add_qwertee_tees(images):
+def add_qwertee_tees(images, browser):
     try:
-        # retrieve images from qwertee
         url = "https://www.qwertee.com"
-        page = requests.get(url)
-        soup = BeautifulSoup(page.content, 'html.parser')
-
-        div_slides = soup.find("div", {"class": "big-slides"})
-        my_divs = div_slides.find_all("div", {"class": "index-tee"})
-
-        for my_div in my_divs:
-            title = my_div.find("div", {"class": "title"})
-            image = my_div.find("img")
-            link = image.get("src").replace("mens", "zoom")
-            images.append(Image(link, title.text, url))
+        browser.get(url)
+        for i in range(1, 4):
+            title = browser.find_element(by=By.XPATH, value=f'//*[@id="root"]/div[1]/main/div/div[1]/div[{i}]/div[1]/header/div[1]/div')
+            image = browser.find_element(by=By.XPATH, value=f'//*[@id="root"]/div[1]/main/div/div[1]/div[{i}]/div[2]/div/div/div[1]/div[2]/img')
+            images.append(Image(image.get_attribute('src'), title.text.replace("\n", " "), url))
 
     except IndexError:
         print("No tees found for qwertee")
 
 
-def add_tee_tee_eu_tees(images):
+def add_tee_tee_eu_tees(images, browser):
     try:
         # retrieve images from teetee
         url = "https://www.teetee.eu"
-        page = requests.get(url)
-        soup = BeautifulSoup(page.content, 'html.parser')
+        browser.get(url)
 
-        a_element = soup.select_one("#teecommerce > div.content.body-product > div > div > div > div:nth-child(2) > "
-                                    "div.col-md-4 > div > a")
+        image = browser.find_element(by=By.XPATH, value='//*[@id="teecommerce"]/div[2]/div/div/div/div[2]/div[2]/div/a')
+        title1 = browser.find_element(by=By.XPATH, value='//*[@id="teecommerce"]/div[1]/div/div/div/div/div[2]/h1')
+        title2 = browser.find_element(by=By.XPATH, value='//*[@id="teecommerce"]/div[1]/div/div/div/div/div[2]/h2')
 
-        url_image = a_element["href"]
-        div_title_1 = soup.select_one(
-            "#teecommerce > div.content.head-product > div > div > div > div > div.info-product.animated.fadeIn > h1")
-        div_title_2 = soup.select_one(
-            "#teecommerce > div.content.head-product > div > div > div > div > div.info-product.animated.fadeIn > h2")
-        title = div_title_1.text + " " + div_title_2.text
+        url_image = image.get_attribute("href")
+        title = title1.text + " " + title2.text
         images.append(Image(url_image.replace("uploads//", "uploads/"), title, url))
 
     except IndexError:
@@ -83,61 +73,40 @@ def add_pampling_tees(images):
         print("No tees found for pampling")
 
 
-def add_theyetee_tees(images):
+def add_theyetee_tees(images, browser):
     try:
         url = "https://theyetee.com"
-        page = requests.get(url)
-        soup = BeautifulSoup(page.content, 'html.parser')
+        browser.get(url)
+        
+        a_element = browser.find_element(by=By.XPATH, value='/html/body/div[6]/article/div[3]/section[1]/div[1]/section/div/div/div[1]/a')
+        url_image = a_element.get_attribute("href")
+        title = browser.find_element(by=By.XPATH, value="/html/body/div[6]/article/div[3]/section[1]/div[2]/div[1]").text
+        images.append(Image(url_image.split("?")[0], title.replace("\n", " "), url))
 
-        dom = etree.HTML(str(soup))
-
-        a_element = dom.xpath("/html/body/div[8]/article/div[3]/section[1]/div[1]/section/div/div/div[1]/a")[0]
-        url_image = "https:" + a_element.attrib["href"]
-
-        name = dom.xpath("/html/body/div[8]/article/div[3]/section[1]/div[2]/div[1]/h2")[0].text
-        owner = dom.xpath("/html/body/div[8]/article/div[3]/section[1]/div[2]/div[1]/div/a")[0].text
-        title = name + " by " + owner
-        images.append(Image(url_image.split("?")[0], title.strip(), url))
-
-        a_element = dom.xpath("/html/body/div[8]/article/div[3]/section[2]/div[1]/section/div/div/div[1]/a")[0]
-        url_image = "https:" + a_element.attrib["href"]
-
-        name = dom.xpath("/html/body/div[8]/article/div[3]/section[2]/div[2]/div[1]/h2")[0].text
-        owner = dom.xpath("/html/body/div[8]/article/div[3]/section[2]/div[2]/div[1]/div/a")[0].text
-        title = name + " " + owner
-        images.append(Image(url_image.split("?")[0], title.strip(), url))
+        a_element = browser.find_element(by=By.XPATH, value="/html/body/div[6]/article/div[3]/section[2]/div[1]/section/div/div/div[1]/a")
+        url_image = a_element.get_attribute("href")
+        title = browser.find_element(by=By.XPATH, value="/html/body/div[6]/article/div[3]/section[2]/div[2]/div[1]").text
+        images.append(Image(url_image.split("?")[0], title.replace("\n", " "), url))
 
     except IndexError:
         print("No tees found for thyeetee")
-
-
-def add_othertees_tees(images):
-    try:
-        base_url = "https://www.othertees.com"
-        url = base_url + "/daily-tees"
-        page = requests.get(url)
-        soup = BeautifulSoup(page.content, 'html.parser')
-
-        for i in range(3):
-            div_element = soup.select(f'#limited_container > div > div:nth-child({i + 1}) > div.project > div.project-img > div')[0]
-            url_image = base_url + div_element.attrs["data-src"]
-            title = soup.select(f'#limited_container > div > div:nth-child({i + 1}) > div.project > h4 > a')[0].text
-            author = soup.select(f'#limited_container > div > div:nth-child({i + 1}) > div.project > h4 > p > a')[0].text
-            title = title + " by " + author
-            images.append(Image(url_image, title.strip(), url))
-    
-    except IndexError:
-        print("No tees found for thyeetee")
-
 
 def get_tees():
+
+
+    # set preferences
+    options = Options()
+    options.add_argument('--headless')
+    browser = webdriver.Firefox(options=options)
+
     images = []
-    add_qwertee_tees(images)
-    # add_tee_tee_eu_tees(images)
+    add_qwertee_tees(images, browser)
+    add_tee_tee_eu_tees(images, browser)
     add_pampling_tees(images)
-    add_theyetee_tees(images)
-    add_othertees_tees(images)
+    add_theyetee_tees(images, browser)
     # https://www.designbyhumans.com/shop/mens-t-shirts/
+
+    browser.close()
     return images
 
 
