@@ -75,7 +75,7 @@ def add_pampling_tees(images):
             div_image = div_images[i].find("div", {"class": "active"})
             title = div_titles[i].text.replace("\n", " ").strip()
 
-            url_image = div_image["style"].replace("background-image:url(", "").replace(");", "")
+            url_image = div_image.find("img")['src']
 
             images.append(Image(url_image, title.strip(), url))
 
