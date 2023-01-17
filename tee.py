@@ -24,7 +24,8 @@ def add_qwertee_tees(images, browser):
         browser.get(url)
         for i in range(1, 4):
             title = browser.find_element(by=By.XPATH, value=f'//*[@id="root"]/div[1]/main/div/div[1]/div[{i}]/div[1]/header/div[1]/div')
-            image = browser.find_element(by=By.XPATH, value=f'//*[@id="root"]/div[2]/main/div/div[1]/div[{i}]/div[2]/div/div/div[1]/div[2]/img')
+            image = browser.find_element(by=By.XPATH, value=f'//*[@id="root"]/div[1]/main/div/div[1]/div[{i}]/div[2]/div/div/div[1]/div[2]/img')
+
             images.append(Image(image.get_attribute('src'), title.text.replace("\n", " "), url))
 
     except IndexError:
@@ -101,9 +102,9 @@ def get_tees():
 
     images = []
     add_qwertee_tees(images, browser)
-    add_tee_tee_eu_tees(images, browser)
-    add_pampling_tees(images)
-    add_theyetee_tees(images, browser)
+    # add_tee_tee_eu_tees(images, browser)
+    # add_pampling_tees(images)
+    # add_theyetee_tees(images, browser)
     # https://www.designbyhumans.com/shop/mens-t-shirts/
 
     browser.close()
