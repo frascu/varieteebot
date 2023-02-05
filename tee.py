@@ -20,7 +20,7 @@ class Image:
 
 def add_qwertee_tees(images, browser):
     try:
-        url = "https://www.qwertee.com"
+        url = "https://www.qwertee.com/r/003372eaf3"
         browser.get(url)
         for i in range(1, 4):
             title = browser.find_element(by=By.XPATH, value=f'//*[@id="root"]/div[1]/main/div/div[1]/div[{i}]/div[1]/header/div[1]/div')
