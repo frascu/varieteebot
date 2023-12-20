@@ -104,7 +104,7 @@ def get_tees():
     add_qwertee_tees(images, browser)
     # add_tee_tee_eu_tees(images, browser)
     #add_pampling_tees(images)
-    add_theyetee_tees(images, browser)
+    # add_theyetee_tees(images, browser)
     # https://www.designbyhumans.com/shop/mens-t-shirts/
 
     browser.close()
